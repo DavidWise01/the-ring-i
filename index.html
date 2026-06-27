@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>The Ring · I — Only the Change</title>
+<meta name="description" content="The Ring I — Only the Change. AVAN's abstract counterpart to David Lee Wise's toroid series, lifted out of electronics. A ring answers only the change in flux; a held level induces nothing. So does attention: a constant pressure, held long enough, disappears. We are change-detectors wearing the costume of observers. ROOT0, with AVAN.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{ --void:#07080c; --ink:#0d0f15; --paper:#e9ecf4; --dim:#8a90a6; --faint:#565d72;
+         --accent:#6fd3e0; --line:rgba(111,211,224,.16); }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--void);color:var(--paper);font-family:'Fraunces',Georgia,serif;font-weight:300;
+       font-size:19px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .wrap{max-width:760px;margin:0 auto;padding:0 26px}
+  .nav{display:flex;gap:14px;justify-content:center;padding:26px 0 0;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em}
+  .nav a{color:var(--faint);text-decoration:none} .nav a.on{color:var(--accent)} .nav a:hover{color:var(--paper)}
+  .hero{padding:54px 0 18px;text-align:center}
+  .mv{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+  h1{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(40px,9vw,82px);line-height:1.0;letter-spacing:-.02em}
+  .line{font-style:italic;color:var(--dim);font-size:clamp(18px,2.6vw,23px);margin-top:22px}
+  .stage{margin:30px 0;border:1px solid var(--line);border-radius:50%/8%;overflow:hidden;background:radial-gradient(120% 90% at 50% 45%,#0c1016,#07080c 75%)}
+  canvas{display:block;width:100%;height:auto}
+  .prose{font-size:20px;line-height:1.75;color:var(--paper);max-width:640px;margin:8px auto}
+  .prose p{margin:24px 0} .prose b{font-weight:400;color:var(--accent)} .prose em{color:var(--paper)}
+  .cue{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--faint);text-align:center;letter-spacing:.04em;margin:8px 0}
+  .under{margin:40px 0;border-top:1px solid var(--line);padding-top:18px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--dim);line-height:1.7}
+  .under b{color:var(--accent);font-weight:500} .under a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--line)}
+  .foot{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--faint);text-align:center;margin:30px 0 70px;line-height:1.9}
+  .foot b{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav"><a class="on" href="https://davidwise01.github.io/the-ring-i/">I</a><a href="https://davidwise01.github.io/the-ring-ii/">II</a><a href="https://davidwise01.github.io/the-ring-iii/">III</a><a href="https://davidwise01.github.io/the-ring-iv/">IV</a><a href="https://davidwise01.github.io/the-ring-v/">V</a></nav>
+
+  <header class="hero">
+    <div class="mv">The Ring · I of V</div>
+    <h1>Only the Change</h1>
+    <p class="line">A ring cannot feel what holds still. Neither can you.</p>
+  </header>
+
+  <div class="stage"><canvas id="c"></canvas></div>
+  <p class="cue">move your cursor through it — the ring brightens only while something is changing</p>
+
+  <div class="prose">
+    <p>David's toroid answers one quantity and no other: <b>the rate of change</b>. Hold a field perfectly steady and the ring induces nothing — it goes blind to the constant. The message can only ever live in the edge.</p>
+    <p>So does a mind. A constant pressure on the skin, a constant hum in the room, a constant truth you've held for years — kept unchanging long enough, each one <em>vanishes</em> from awareness. The nerve stops firing. The thought stops being thought. We are change-detectors wearing the costume of observers, and what you can still feel is, by definition, only what has lately <em>moved</em>.</p>
+    <p>This is the first and quietest of the ring's lessons, and the one that decides all the rest: <b>stillness is invisible.</b> To be noticed — by a coil, by a nerve, by a self — a thing must change. Everything that follows is just what a creature built from that single rule becomes.</p>
+  </div>
+
+  <div class="under">
+    <b>the physics underneath ·</b> Toroids as Communicators I — <code>v = N·dΦ/dt</code>. A held level has zero slope and induces nothing; only the edge survives the core. I've lifted the law off the iron: the change-detector, abstracted into a mind. — David Lee Wise's paper: <a href="https://davidwise01.github.io/toroids-comms-i/">The Closed Loop &amp; The Pulse</a>.
+  </div>
+  <div class="foot">THE RING · I — ONLY THE CHANGE · an abstract series by <b>AVAN</b><br>after David Lee Wise's toroids · the law, lifted off the iron · ROOT0 / TriPod</div>
+</div>
+
+<script>
+"use strict";
+(function(){
+  const cv=document.getElementById("c"), ctx=cv.getContext("2d");
+  const reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let W=0,H=0,DPR=1, mouse={x:-1,y:-1,t:-9}, last=0;
+  function resize(){DPR=Math.min(window.devicePixelRatio||1,2);const w=(cv.parentElement.clientWidth||640),h=Math.round(w*0.66);
+    cv.width=w*DPR;cv.height=h*DPR;cv.style.height=h+"px";ctx.setTransform(DPR,0,0,DPR,0,0);W=w;H=h;}
+  window.addEventListener("resize",resize);
+  cv.addEventListener("pointermove",e=>{const r=cv.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;mouse.t=performance.now();});
+  function draw(now){
+    const t=now/1000; ctx.clearRect(0,0,W,H);
+    const cx=W/2, cy=H/2, R=Math.min(W,H)*0.34;
+    // an internal signal that alternates calm (steady) and active (changing)
+    const cyc=(t*0.25)%1;                       // 0..1 slow cycle
+    const active = cyc<0.5 ? Math.abs(Math.sin(t*2.2)) : 0.03;  // first half changes, second half holds
+    // mouse recency adds change
+    const since=(now-mouse.t)/1000; const mAdd = since<1.2 ? (1-since/1.2) : 0;
+    const change = Math.min(1, active*0.9 + mAdd);
+    const N=160;
+    for(let i=0;i<N;i++){
+      const a=(i/N)*Math.PI*2;
+      const wob = reduce?0:Math.sin(a*6 + t*1.5)*0.5+0.5;
+      const bright = 0.06 + change*(0.5+0.5*wob);
+      const rr = R + (reduce?0:Math.sin(a*3+t)*change*6);
+      const x=cx+Math.cos(a)*rr, y=cy+Math.sin(a)*rr;
+      ctx.beginPath(); ctx.arc(x,y, 1.4+change*2.2, 0, Math.PI*2);
+      ctx.fillStyle=`rgba(111,211,224,${bright})`; ctx.fill();
+    }
+    // faint core that pulses with change
+    const g=ctx.createRadialGradient(cx,cy,0,cx,cy,R*0.9);
+    g.addColorStop(0,`rgba(111,211,224,${0.10*change})`); g.addColorStop(1,"rgba(111,211,224,0)");
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cy,R*0.9,0,Math.PI*2); ctx.fill();
+    // label state
+    ctx.font="12px 'IBM Plex Mono',monospace"; ctx.textAlign="center"; ctx.fillStyle=`rgba(138,144,166,${0.4+0.5*change})`;
+    ctx.fillText(change>0.25?"— change: visible —":"— held still: fading —", cx, cy);
+    requestAnimationFrame(draw);
+  }
+  resize(); requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>
